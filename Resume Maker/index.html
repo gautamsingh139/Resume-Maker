@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareerLaunch AI - Student Resume Builder</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#builder" aria-label="CareerLaunch AI home">
+      <span class="brand-mark">CL</span>
+      <span>
+        <strong>CareerLaunch AI</strong>
+        <small>Student Resume Studio</small>
+      </span>
+    </a>
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#builder">Builder</a>
+      <a href="#analyzer">Analyzer</a>
+      <a href="#tools">Tools</a>
+      <a href="#dashboard">Dashboard</a>
+    </nav>
+    <button class="icon-button" id="themeToggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button>
+  </header>
+
+  <main>
+    <section class="workspace" id="builder">
+      <div class="section-heading">
+        <p class="eyebrow">Free Resume Builder</p>
+        <h1>Build a job-ready student resume in one focused workspace.</h1>
+        <p>Fill the sections, choose a template, get AI-style prompts, track completion, and download a polished PDF from your browser.</p>
+      </div>
+
+      <div class="builder-layout">
+        <form class="editor-panel" id="resumeForm">
+          <div class="panel-toolbar">
+            <label>
+              Resume name
+              <input id="resumeName" type="text" placeholder="My internship resume" />
+            </label>
+            <label>
+              Target role
+              <input id="targetRole" type="text" placeholder="Frontend Developer Intern" />
+            </label>
+          </div>
+
+          <div class="template-grid" id="templatePicker" aria-label="Resume templates">
+            <button class="template-choice active" type="button" data-template="modern">Modern</button>
+            <button class="template-choice" type="button" data-template="ats">ATS-Friendly</button>
+            <button class="template-choice" type="button" data-template="minimal">Minimal</button>
+            <button class="template-choice" type="button" data-template="professional">Professional</button>
+            <button class="template-choice" type="button" data-template="internship">Internship</button>
+            <button class="template-choice" type="button" data-template="fresher">Fresher</button>
+          </div>
+
+          <details open>
+            <summary>Personal information</summary>
+            <div class="form-grid">
+              <label>Full name <input name="fullName" type="text" placeholder="Gautam Singh" /></label>
+              <label>Email <input name="email" type="email" placeholder="gautam@email.com" /></label>
+              <label>Phone <input name="phone" type="tel" placeholder="+91 12345 67890" /></label>
+              <label>Location <input name="location" type="text" placeholder="Delhi, India" /></label>
+              <label>LinkedIn <input name="linkedin" type="url" placeholder="linkedin.com/in/yourname" /></label>
+              <label>Portfolio/GitHub <input name="portfolio" type="url" placeholder="github.com/yourname" /></label>
+              <label class="full">Profile photo <input id="photoUpload" type="file" accept="image/*" /></label>
+            </div>
+          </details>
+
+          <details open>
+            <summary>Career objective</summary>
+            <textarea name="objective" rows="4" placeholder="Motivated student seeking an internship where I can apply..."></textarea>
+            <button class="ghost-button" id="objectiveBtn" type="button">Generate objective</button>
+          </details>
+
+          <div class="repeater" data-section="education">
+            <div class="repeater-head">
+              <h2>Education</h2>
+              <button type="button" class="small-button add-row">Add</button>
+            </div>
+            <div class="rows"></div>
+          </div>
+
+          <div class="repeater" data-section="skills">
+            <div class="repeater-head">
+              <h2>Skills</h2>
+              <button type="button" class="small-button" id="suggestSkills">Suggest skills</button>
+            </div>
+            <textarea name="skills" rows="3" placeholder="JavaScript, React, HTML, CSS, Git, Communication"></textarea>
+          </div>
+
+          <div class="repeater" data-section="projects">
+            <div class="repeater-head">
+              <h2>Projects</h2>
+              <button type="button" class="small-button add-row">Add</button>
+            </div>
+            <div class="rows"></div>
+          </div>
+
+          <div class="repeater" data-section="certifications">
+            <div class="repeater-head">
+              <h2>Certifications</h2>
+              <button type="button" class="small-button add-row">Add</button>
+            </div>
+            <div class="rows"></div>
+          </div>
+
+          <div class="repeater" data-section="internships">
+            <div class="repeater-head">
+              <h2>Internships</h2>
+              <button type="button" class="small-button add-row">Add</button>
+            </div>
+            <div class="rows"></div>
+          </div>
+
+          <div class="form-grid">
+            <label class="full">Achievements <textarea name="achievements" rows="3" placeholder="Won coding contest, led college club..."></textarea></label>
+            <label>Languages known <input name="languages" type="text" placeholder="English, Hindi, Telugu" /></label>
+            <label>Hobbies and interests <input name="hobbies" type="text" placeholder="Reading, UI design, cricket" /></label>
+            <label class="full">References <textarea name="references" rows="3" placeholder="Available on request / Professor details"></textarea></label>
+          </div>
+
+          <div class="action-row">
+            <button class="primary-button" id="saveResume" type="button">Save resume</button>
+            <button class="secondary-button" id="downloadPdf" type="button">Download PDF</button>
+            <button class="ghost-button" id="clearForm" type="button">Clear</button>
+          </div>
+        </form>
+
+        <aside class="preview-panel">
+          <div class="progress-card">
+            <div>
+              <span>Resume completion</span>
+              <strong id="completionText">0%</strong>
+            </div>
+            <progress id="completionBar" value="0" max="100"></progress>
+          </div>
+          <article id="resumePaper" class="resume-paper template-modern"></article>
+        </aside>
+      </div>
+    </section>
+
+    <section class="workspace band" id="analyzer">
+      <div class="section-heading compact">
+        <p class="eyebrow">Resume analyzer</p>
+        <h2>Check ATS readiness, weak sections, keywords, and missing skills.</h2>
+      </div>
+      <div class="analyzer-grid">
+        <div class="tool-panel">
+          <label>Upload PDF resume <input id="pdfUpload" type="file" accept="application/pdf" /></label>
+          <label>Or paste resume text <textarea id="resumeText" rows="10" placeholder="Paste resume text here for the most accurate analysis..."></textarea></label>
+          <label>Target job role <input id="analyzeRole" type="text" placeholder="Data Analyst Intern" /></label>
+          <button class="primary-button" id="analyzeBtn" type="button">Analyze resume</button>
+        </div>
+        <div class="analysis-output" id="analysisOutput"></div>
+      </div>
+    </section>
+
+    <section class="workspace" id="tools">
+      <div class="section-heading compact">
+        <p class="eyebrow">Student tools</p>
+        <h2>Generate practical starting points for applications and interviews.</h2>
+      </div>
+      <div class="tools-grid">
+        <div class="tool-panel">
+          <h3>Cover letter generator</h3>
+          <input id="companyName" type="text" placeholder="Company name" />
+          <textarea id="jobDescription" rows="5" placeholder="Paste job description or key requirements"></textarea>
+          <button class="secondary-button" id="coverBtn" type="button">Generate cover letter</button>
+          <div class="generated-box" id="coverOutput"></div>
+        </div>
+        <div class="tool-panel">
+          <h3>Interview tips</h3>
+          <ul class="check-list">
+            <li>Prepare a 60-second introduction with education, skills, and one project.</li>
+            <li>Use STAR format for behavioral answers.</li>
+            <li>Explain projects through problem, action, result, and tools used.</li>
+            <li>Keep two thoughtful questions ready for the interviewer.</li>
+            <li>Review the company, role, and recent product updates before the call.</li>
+          </ul>
+        </div>
+        <div class="tool-panel">
+          <h3>Resume checklist</h3>
+          <div id="checklist" class="checklist"></div>
+        </div>
+        <div class="tool-panel accent-panel">
+          <h3>AI suggestions</h3>
+          <p id="aiSuggestion">Add a target role to unlock tailored skill, keyword, and objective suggestions.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="workspace band" id="dashboard">
+      <div class="section-heading compact">
+        <p class="eyebrow">Dashboard</p>
+        <h2>Save, edit, compare, and continue multiple resumes.</h2>
+      </div>
+      <div class="dashboard-grid" id="resumeList"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>CareerLaunch AI runs locally in your browser. Your resume data is stored on this device using local storage.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
